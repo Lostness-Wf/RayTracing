@@ -3,17 +3,31 @@
 
 #include "Walnut/Image.h"
 
+using namespace Walnut;
+
 class ExampleLayer : public Walnut::Layer
 {
 public:
 	virtual void OnUIRender() override
 	{
-		ImGui::Begin("Hello");
-		ImGui::Button("Button");
+		ImGui::Begin("Settings");
+		if (ImGui::Button("Render"))
+		{
+			Render();
+		}
 		ImGui::End();
 
-		ImGui::ShowDemoWindow();
+		ImGui::Begin("Viewport");
+		ImGui::End();
+
 	}
+
+	void Render()
+	{
+		//m_Image = std::make_shared<Image>();
+	}
+private:
+	std::shared_ptr<Image> m_Image;
 };
 
 Walnut::Application* Walnut::CreateApplication(int argc, char** argv)

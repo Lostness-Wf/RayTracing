@@ -60,6 +60,8 @@ namespace Walnut {
 		void Init();
 		void Shutdown();
 	private:
+		void SetDarkThemeColors();
+
 		ApplicationSpecification m_Specification;
 		GLFWwindow* m_WindowHandle = nullptr;
 		bool m_Running = false;
