@@ -36,7 +36,7 @@ void Renderer::OnResize(uint32_t width, uint32_t height)
 	m_ImageData = new uint32_t[width * height];
 }
 
-void Renderer::Render(const Camera& camera)
+void Renderer::Render(const Camera& camera, glm::vec3 lightDir)
 {
 	Ray ray;
 	ray.Origin = camera.GetPosition();
@@ -46,7 +46,7 @@ void Renderer::Render(const Camera& camera)
 		for (uint32_t x = 0; x < m_FinalImage->GetWidth(); x++)
 		{
 			ray.Direction = camera.GetRayDirections()[x + y * m_FinalImage->GetWidth()];
-			glm::vec4 color = TraceRay(ray);
+			glm::vec4 color = TraceRay(ray, lightDir);
 			color = glm::clamp(color, glm::vec4(0.0f), glm::vec4(1.0f));
 			//二维数组转一维数组
 			m_ImageData[x + y * m_FinalImage->GetWidth()] = Utils::ConvertToRGBA(color);
@@ -56,7 +56,7 @@ void Renderer::Render(const Camera& camera)
 	m_FinalImage->SetData(m_ImageData);
 }
 
-glm::vec4 Renderer::TraceRay(const Ray& ray)
+glm::vec4 Renderer::TraceRay(const Ray& ray, glm::vec3 lightDir)
 {
 	float radius = 0.5f;
 	// rayDirection = glm::normalize(rayDirection);
@@ -89,7 +89,7 @@ glm::vec4 Renderer::TraceRay(const Ray& ray)
 	glm::vec3 hitPoint = ray.Origin + ray.Direction * closestT;
 	glm::vec3 normal = glm::normalize(hitPoint);
 
-	glm::vec3 LightDir = glm::normalize(glm::vec3(-1, -1, -1));
+	glm::vec3 LightDir = glm::normalize(lightDir);
 	//法向量和归一化的光线点积，得到cos夹角，夹角越大，说明击中点越面向光源
 	float lightIntensity = glm::max(glm::dot(normal, -LightDir), 0.0f); // == cos(angle)
 
