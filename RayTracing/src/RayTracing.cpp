@@ -7,17 +7,25 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "Renderer.h"
+#include "Camera.h"
 
 using namespace Walnut;
 
 class ExampleLayer : public Walnut::Layer
 {
 public:
+	ExampleLayer()
+		: m_Camera(45.0f, 0.1f, 100.0f) {}
+
+	virtual void OnUpdate(float ts) override
+	{
+		m_Camera.OnUpdate(ts);
+	}
+
 	virtual void OnUIRender() override
 	{
 		ImGui::Begin("Settings");
 		ImGui::Text("Last render: %.3fms", m_LastRenderTime);
-		ImGui::DragFloat3("LightDirection", glm::value_ptr(m_lightDir));
 		if (ImGui::Button("Render"))
 		{
 			Render();
@@ -46,14 +54,15 @@ public:
 		Timer timer;
 
 		m_Renderer.OnResize(m_ViewportWidth, m_ViewportHeight);
-		m_Renderer.Render(m_lightDir);
+		m_Camera.OnResize(m_ViewportWidth, m_ViewportHeight);
+		m_Renderer.Render(m_Camera);
 
 		m_LastRenderTime = timer.ElapsedMillis();
 	}
 private:
 	Renderer m_Renderer;
+	Camera m_Camera;
 	uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
-	glm::vec3 m_lightDir = {-1, -1, -1};
 
 	float m_LastRenderTime = 0.0f;
 };
