@@ -51,6 +51,7 @@ public:
 
 		ImGui::Begin("Scene");
 		ImGui::DragFloat3("LightDirection", glm::value_ptr(m_lightDir), 0.1f);
+		ImGui::Separator();
 		for (size_t i = 0; i < m_Scene.Spheres.size(); i++)
 		{
 			ImGui::PushID(i);
