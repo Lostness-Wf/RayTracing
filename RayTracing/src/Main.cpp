@@ -8,6 +8,7 @@
 
 #include "Renderer.h"
 #include "Camera.h"
+#include <thread>
 
 using namespace Walnut;
 
@@ -17,6 +18,9 @@ public:
 	ExampleLayer()
 		: m_Camera(45.0f, 0.1f, 100.0f)
 	{
+		unsigned int thread = std::thread::hardware_concurrency();
+		std::cout << "thread:" << thread << std::endl;
+
 		Material& pinkSphere = m_Scene.Materials.emplace_back();
 		pinkSphere.Albedo = { 1.0f, 0.0f, 1.0f };
 		pinkSphere.Roughness = 0.0f;
